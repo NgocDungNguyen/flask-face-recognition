@@ -4,7 +4,10 @@
     {
       "src": "app.py",
       "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+      "config": { 
+        "maxLambdaSize": "15mb",
+        "runtime": "python3.9"
+      }
     }
   ],
   "routes": [
@@ -13,7 +16,9 @@
       "dest": "/app.py"
     }
   ],
-  "env": {
-    "PIP_TARGET": ".pip_target"
+  "build": {
+    "env": {
+      "PIP_TARGET": ".pip_target"
+    }
   }
 }
