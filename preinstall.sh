@@ -6,6 +6,8 @@ set -e
 apt-get update
 
 # Install dependencies for dlib
+apt-get install -y cmake
+
 apt-get install -y cmake build-essential
 
 echo "CMake and build-essential installed successfully"
