@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Test Image</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .spinner-border {
+            width: 3rem;
+            height: 3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Upload Test Image</h1>
+        <form id="upload-form" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="test_image" class="form-label">Upload Test Image:</label>
+                <input type="file" class="form-control" id="test_image" name="test_image" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload and Compare</button>
+        </form>
+        <div id="loading">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p>Processing image, please wait...</p>
+        </div>
+        <div id="results"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#upload-form').on('submit', function(e) {
+                e.preventDefault();
+                var formData = new FormData(this);
+
+                $.ajax({
+                    url: '/upload_test',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    beforeSend: function() {
+                        $('#loading').show();
+                    },
+                    success: function(response) {
+                        checkJobStatus(response.job_id);
+                    },
+                    error: function() {
+                        $('#loading').hide();
+                        $('#results').html('<p class="text-danger">An error occurred during upload.</p>');
+                    }
+                });
+            });
+
+            function checkJobStatus(jobId) {
+                $.getJSON('/job_status/' + jobId, function(data) {
+                    if (data.status === 'complete') {
+                        $('#loading').hide();
+                        displayResults(data.results);
+                    } else {
+                        setTimeout(function() {
+                            checkJobStatus(jobId);
+                        }, 1000);
+                    }
+                });
+            }
+
+            function displayResults(results) {
+                var resultsHtml = '<h2>Recognition Results:</h2>';
+                resultsHtml += '<img src="/uploads/' + results.result_image_path + '" alt="Recognition Result" class="img-fluid mb-3">';
+                resultsHtml += '<ul class="list-group">';
+                results.results.forEach(function(face) {
+                    resultsHtml += '<li class="list-group-item">';
+                    resultsHtml += face.name + ' (Confidence: ' + (face.confidence * 100).toFixed(2) + '%)';
+                    resultsHtml += '<br>Location: (' + face.location.join(', ') + ')';
+                    resultsHtml += '</li>';
+                });
+                resultsHtml += '</ul>';
+                $('#results').html(resultsHtml);
+            }
+        });
+    </script>
+</body>
+</html>
