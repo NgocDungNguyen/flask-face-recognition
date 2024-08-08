@@ -9,5 +9,8 @@ wget https://github.com/Kitware/CMake/releases/download/v3.25.0/cmake-3.25.0-lin
 chmod +x cmake-3.25.0-linux-x86_64.sh
 ./cmake-3.25.0-linux-x86_64.sh --skip-license --prefix=/usr/local
 
+# Verify CMake installation
+cmake --version
+
 # Install dlib manually
 pip install dlib
