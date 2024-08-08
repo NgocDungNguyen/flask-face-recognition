@@ -5,7 +5,7 @@
       "src": "app.py",
       "use": "@vercel/python",
       "config": {
-        "preinstall": "bash preinstall.sh"
+        "buildCommand": "apt-get update && apt-get install -y cmake build-essential libopenblas-dev liblapack-dev && pip install cmake && pip install -r requirements.txt"
       }
     }
   ],
