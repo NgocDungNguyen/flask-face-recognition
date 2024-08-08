@@ -1,6 +1,5 @@
 {
-    "scripts": {
-      "build": "bash preinstall.sh && vercel-build"
-    }
+  "scripts": {
+    "build": "bash preinstall.sh && vercel-build"
   }
-  
+}
