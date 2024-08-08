@@ -11,8 +11,5 @@
       "src": "/(.*)",
       "dest": "/app.py"
     }
-  ],
-  "hooks": {
-    "build": "bash preinstall.sh"
-  }
+  ]
 }
