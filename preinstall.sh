@@ -12,5 +12,8 @@ chmod +x cmake-3.25.0-linux-x86_64.sh
 # Verify CMake installation
 cmake --version
 
+# Ensure pip is up-to-date
+pip install --upgrade pip
+
 # Install dlib manually
 pip install dlib
